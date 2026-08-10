@@ -7,9 +7,9 @@
   },
   "scripts": {
     "build:theme": "pnpm --filter @dylandebeer/theme-pastel build",
-    "dev": "pnpm run build:theme && pnpm run build:projects && vite dev --port 3000",
+    "dev": "pnpm run build:theme && vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "build": "pnpm run build:theme && pnpm run build:projects && vite build",
+    "build": "pnpm run build:theme && vite build",
     "preview": "vite preview",
     "format": "biome format",
     "lint": "biome lint",
