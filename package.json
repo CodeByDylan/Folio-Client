@@ -2,6 +2,7 @@
   "name": "folio-client",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.20.0",
   "imports": {
     "#/*": "./src/*"
   },
@@ -14,6 +15,7 @@
     "format": "biome format",
     "lint": "biome lint",
     "check": "biome check",
+    "typecheck": "pnpm run build:theme && tsc --noEmit",
     "prepare": "husky"
   },
   "dependencies": {
