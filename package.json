@@ -17,9 +17,7 @@
   },
   "dependencies": {
     "@astryxdesign/core": "catalog:",
-    "@astryxdesign/theme-neutral": "^0.3.0",
     "@dylandebeer/theme-pastel": "workspace:*",
-    "@heroicons/react": "^2.2.0",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-form": "latest",
