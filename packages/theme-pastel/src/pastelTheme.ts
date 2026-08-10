@@ -62,7 +62,7 @@ export const pastelTheme = defineTheme({
 		"--color-overlay-hover": ["#1e2a3d0d", "#ffffff0d"],
 		"--color-overlay-pressed": ["#1e2a3d1a", "#ffffff1a"],
 		"--color-neutral": ["#1e2a3d0f", "#ffffff1a"],
-		"--color-shadow": ["#1e2a3d", "#000000"],
+		"--color-shadow": ["#1e2a3d1a", "#0000004d"],
 		"--color-skeleton": ["#e4eaf5", "#222c40"],
 	},
 });
