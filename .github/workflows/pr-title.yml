@@ -1,0 +1,32 @@
+name: PR Title
+
+on:
+  pull_request:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  lint-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 11
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Lint PR title against the conventional preset
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: >
+          echo "$PR_TITLE" |
+          pnpm --package=@commitlint/cli --package=@commitlint/config-conventional
+          dlx commitlint --extends @commitlint/config-conventional
