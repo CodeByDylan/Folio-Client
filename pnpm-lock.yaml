@@ -7,11 +7,11 @@ settings:
 catalogs:
   default:
     '@astryxdesign/cli':
-      specifier: ^0.2.0
-      version: 0.2.0
+      specifier: ^0.3.0
+      version: 0.3.0
     '@astryxdesign/core':
-      specifier: ^0.2.0
-      version: 0.2.0
+      specifier: ^0.3.0
+      version: 0.3.0
     react:
       specifier: ^19.2.0
       version: 19.2.8
@@ -28,10 +28,10 @@ importers:
     dependencies:
       '@astryxdesign/core':
         specifier: 'catalog:'
-        version: 0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       '@astryxdesign/theme-neutral':
         specifier: ^0.3.0
-        version: 0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+        version: 0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
       '@dylandebeer/theme-pastel':
         specifier: workspace:*
         version: link:packages/theme-pastel
@@ -80,7 +80,7 @@ importers:
     devDependencies:
       '@astryxdesign/cli':
         specifier: 'catalog:'
-        version: 0.2.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)
+        version: 0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)
       '@biomejs/biome':
         specifier: 2.4.5
         version: 2.4.5
@@ -117,18 +117,18 @@ importers:
     devDependencies:
       '@astryxdesign/cli':
         specifier: 'catalog:'
-        version: 0.2.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)
+        version: 0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)
       '@astryxdesign/core':
         specifier: 'catalog:'
-        version: 0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+        version: 0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
 
 packages:
 
-  '@astryxdesign/cli@0.2.0':
-    resolution: {integrity: sha512-JTMP6Au3r3IOqZcvF648XP7akiynSYfbYM3nxHyIjhYVTCGnwPAF6mrQRTzxoTSh5NvRktYzV5Mv3tEuhvw0lg==}
+  '@astryxdesign/cli@0.3.0':
+    resolution: {integrity: sha512-iLFJsBlZUb66GskA1r3AmuodW72yu0PhCRAorcGPMuwHbGYn54pXGb/EnnWSdHf3Yuw4E3OuN7r4dY0TYJuYmQ==}
     hasBin: true
     peerDependencies:
       '@astryxdesign/charts': '*'
@@ -146,8 +146,8 @@ packages:
       '@astryxdesign/theme-neutral':
         optional: true
 
-  '@astryxdesign/core@0.2.0':
-    resolution: {integrity: sha512-lj+RZ5iZ/k9Hm/WzxCd+p4d513HIp64gXhWFfsqJSshfFEQZO2X8GKbYx5MQIN7mneFr7lX/+qMv/4pMBT2QNA==}
+  '@astryxdesign/core@0.3.0':
+    resolution: {integrity: sha512-t2hHvR7AcwW0oKrnxCwbdEEE5Ytgy0Ug61DcYAl9BxAuV5z4XL0/kMo5DiPvX9jbDxzysmOa8ClnXqzxouRUVQ==}
     peerDependencies:
       '@stylexjs/stylex': ^0.19.0
       react: '>=19.0.0'
@@ -1878,7 +1878,7 @@ packages:
 
 snapshots:
 
-  '@astryxdesign/cli@0.2.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)':
+  '@astryxdesign/cli@0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8))(gpt-tokenizer@3.4.0)':
     dependencies:
       commander: 12.1.0
       gpt-tokenizer: 3.4.0
@@ -1886,22 +1886,22 @@ snapshots:
       jscodeshift: 17.4.0
       zod: 4.4.3
     optionalDependencies:
-      '@astryxdesign/core': 0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@astryxdesign/theme-neutral': 0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
+      '@astryxdesign/core': 0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@astryxdesign/theme-neutral': 0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)
     transitivePeerDependencies:
       - '@babel/preset-env'
       - supports-color
 
-  '@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
+  '@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)':
     dependencies:
       '@stylexjs/stylex': 0.19.0
       intl-messageformat: 11.2.13
       react: 19.2.8
       react-dom: 19.2.8(react@19.2.8)
 
-  '@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
+  '@astryxdesign/theme-neutral@0.3.0(@astryxdesign/core@0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8))(react@19.2.8)':
     dependencies:
-      '@astryxdesign/core': 0.2.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
+      '@astryxdesign/core': 0.3.0(@stylexjs/stylex@0.19.0)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
       lucide-react: 1.30.0(react@19.2.8)
       react: 19.2.8
 
