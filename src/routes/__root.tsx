@@ -5,6 +5,8 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
+import { Theme } from '@astryxdesign/core/theme'
+import { pastelTheme } from '@dylandebeer/theme-pastel/built'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
@@ -42,12 +44,14 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    // Astryx theme CSS is @scope'd to this attribute; setting it server-side
+    // keeps tokens applied on first paint and reaches portals.
+    <html lang="en" data-astryx-theme={pastelTheme.name}>
       <head>
         <HeadContent />
       </head>
-      <body>
-        {children}
+      <body className="bg-body text-primary">
+        <Theme theme={pastelTheme}>{children}</Theme>
         <TanStackDevtools
           config={{
             position: 'bottom-right',
