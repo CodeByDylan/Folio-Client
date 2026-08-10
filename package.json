@@ -16,7 +16,8 @@
     "lint": "biome lint",
     "check": "biome check",
     "typecheck": "pnpm run build:theme && tsc --noEmit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "api:generate": "openapi-ts"
   },
   "dependencies": {
     "@astryxdesign/core": "catalog:",
@@ -40,6 +41,7 @@
     "@biomejs/biome": "2.4.5",
     "@commitlint/cli": "^21.2.1",
     "@commitlint/config-conventional": "^21.2.0",
+    "@hey-api/openapi-ts": "^0.99.0",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
     "@types/node": "^22.10.2",
