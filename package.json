@@ -2,19 +2,25 @@
   "name": "folio-client",
   "private": true,
   "type": "module",
+  "packageManager": "pnpm@11.20.0",
   "imports": {
     "#/*": "./src/*"
   },
   "scripts": {
-    "dev": "vite dev --port 3000",
+    "build:theme": "pnpm --filter @dylandebeer/theme-pastel build",
+    "dev": "pnpm run build:theme && vite dev --port 3000",
     "generate-routes": "tsr generate",
-    "build": "vite build",
+    "build": "pnpm run build:theme && vite build",
     "preview": "vite preview",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "typecheck": "pnpm run build:theme && tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
+    "@astryxdesign/core": "catalog:",
+    "@dylandebeer/theme-pastel": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
     "@tanstack/react-form": "latest",
@@ -24,26 +30,28 @@
     "@tanstack/react-router-devtools": "latest",
     "@tanstack/react-router-ssr-query": "latest",
     "@tanstack/react-start": "latest",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "react": "catalog:",
+    "react-dom": "catalog:",
     "tailwindcss": "^4.1.18",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@astryxdesign/cli": "catalog:",
     "@biomejs/biome": "2.4.5",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/router-cli": "^1.132.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
-    "typescript": "^6.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.3.0",
+    "typescript": "catalog:",
     "vite": "^8.0.0"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild",
-      "lightningcss"
-    ]
+  "lint-staged": {
+    "*": "biome check --write --no-errors-on-unmatched"
   }
 }

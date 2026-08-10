@@ -1,0 +1,35 @@
+{
+  "name": "@dylandebeer/theme-pastel",
+  "version": "0.1.0",
+  "displayName": "Pastel Theme",
+  "description": "Astryx theme: off-white blue-tinted light mode, dark slate dark mode, pastel periwinkle accents in both.",
+  "private": true,
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./src/pastelTheme.ts",
+      "default": "./src/pastelTheme.ts"
+    },
+    "./built": {
+      "types": "./dist/pastel.d.ts",
+      "default": "./dist/pastel.js"
+    },
+    "./theme.css": {
+      "default": "./dist/theme.css"
+    }
+  },
+  "files": ["dist", "src"],
+  "scripts": {
+    "build": "astryx theme build src/pastelTheme.ts --out dist/theme.css"
+  },
+  "peerDependencies": {
+    "@astryxdesign/core": "catalog:",
+    "react": "catalog:"
+  },
+  "devDependencies": {
+    "@astryxdesign/cli": "catalog:",
+    "@astryxdesign/core": "catalog:",
+    "typescript": "catalog:"
+  }
+}
