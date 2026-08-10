@@ -4,16 +4,12 @@ packages:
 allowBuilds:
   '@astryxdesign/cli': false
   '@astryxdesign/core': false
+  esbuild: true
   lightningcss: true
 
-# Post install scripts only print a setup nudge; init already ran.
 catalog:
   '@astryxdesign/cli': ^0.3.0
   '@astryxdesign/core': ^0.3.0
   react: ^19.2.0
   react-dom: ^19.2.0
   typescript: ^6.0.2
-
-onlyBuiltDependencies:
-  - esbuild
-  - lightningcss
