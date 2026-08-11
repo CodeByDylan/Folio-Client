@@ -15,6 +15,18 @@ export const pastelTheme = defineTheme({
 
 	radius: { base: 4, multiplier: 0.75 },
 
+	typography: {
+		scale: { base: 17, ratio: 1.29 },
+		body: {
+			family: "Inter",
+			fallbacks: "system-ui, -apple-system, sans-serif",
+		},
+		code: {
+			family: "JetBrains Mono",
+			fallbacks: "ui-monospace, SFMono-Regular, monospace",
+		},
+	},
+
 	tokens: {
 		// Surfaces
 		"--color-background-body": ["#f4f7fc", "#0f1626"],
@@ -66,5 +78,3 @@ export const pastelTheme = defineTheme({
 		"--color-skeleton": ["#e4eaf5", "#222c40"],
 	},
 });
-
-export default pastelTheme;

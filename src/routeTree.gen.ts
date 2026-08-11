@@ -9,50 +9,135 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as ShellRouteRouteImport } from './routes/_shell/route'
+import { Route as ShellIndexRouteImport } from './routes/_shell/index'
+import { Route as ShellSplatRouteImport } from './routes/_shell/$'
+import { Route as ShellProjectsIndexRouteImport } from './routes/_shell/projects.index'
+import { Route as ShellProjectsSlugRouteImport } from './routes/_shell/projects.$slug'
 
-const IndexRoute = IndexRouteImport.update({
+const ShellRouteRoute = ShellRouteRouteImport.update({
+  id: '/_shell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ShellIndexRoute = ShellIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => ShellRouteRoute,
+} as any)
+const ShellSplatRoute = ShellSplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => ShellRouteRoute,
+} as any)
+const ShellProjectsIndexRoute = ShellProjectsIndexRouteImport.update({
+  id: '/projects/',
+  path: '/projects/',
+  getParentRoute: () => ShellRouteRoute,
+} as any)
+const ShellProjectsSlugRoute = ShellProjectsSlugRouteImport.update({
+  id: '/projects/$slug',
+  path: '/projects/$slug',
+  getParentRoute: () => ShellRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof ShellIndexRoute
+  '/$': typeof ShellSplatRoute
+  '/projects/$slug': typeof ShellProjectsSlugRoute
+  '/projects/': typeof ShellProjectsIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/$': typeof ShellSplatRoute
+  '/': typeof ShellIndexRoute
+  '/projects/$slug': typeof ShellProjectsSlugRoute
+  '/projects': typeof ShellProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_shell': typeof ShellRouteRouteWithChildren
+  '/_shell/$': typeof ShellSplatRoute
+  '/_shell/': typeof ShellIndexRoute
+  '/_shell/projects/$slug': typeof ShellProjectsSlugRoute
+  '/_shell/projects/': typeof ShellProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/$' | '/projects/$slug' | '/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/$' | '/' | '/projects/$slug' | '/projects'
+  id:
+    | '__root__'
+    | '/_shell'
+    | '/_shell/$'
+    | '/_shell/'
+    | '/_shell/projects/$slug'
+    | '/_shell/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  ShellRouteRoute: typeof ShellRouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_shell': {
+      id: '/_shell'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof ShellRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_shell/': {
+      id: '/_shell/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof ShellIndexRouteImport
+      parentRoute: typeof ShellRouteRoute
+    }
+    '/_shell/$': {
+      id: '/_shell/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof ShellSplatRouteImport
+      parentRoute: typeof ShellRouteRoute
+    }
+    '/_shell/projects/': {
+      id: '/_shell/projects/'
+      path: '/projects'
+      fullPath: '/projects/'
+      preLoaderRoute: typeof ShellProjectsIndexRouteImport
+      parentRoute: typeof ShellRouteRoute
+    }
+    '/_shell/projects/$slug': {
+      id: '/_shell/projects/$slug'
+      path: '/projects/$slug'
+      fullPath: '/projects/$slug'
+      preLoaderRoute: typeof ShellProjectsSlugRouteImport
+      parentRoute: typeof ShellRouteRoute
     }
   }
 }
 
+interface ShellRouteRouteChildren {
+  ShellSplatRoute: typeof ShellSplatRoute
+  ShellIndexRoute: typeof ShellIndexRoute
+  ShellProjectsSlugRoute: typeof ShellProjectsSlugRoute
+  ShellProjectsIndexRoute: typeof ShellProjectsIndexRoute
+}
+
+const ShellRouteRouteChildren: ShellRouteRouteChildren = {
+  ShellSplatRoute: ShellSplatRoute,
+  ShellIndexRoute: ShellIndexRoute,
+  ShellProjectsSlugRoute: ShellProjectsSlugRoute,
+  ShellProjectsIndexRoute: ShellProjectsIndexRoute,
+}
+
+const ShellRouteRouteWithChildren = ShellRouteRoute._addFileChildren(
+  ShellRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  ShellRouteRoute: ShellRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
