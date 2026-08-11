@@ -4,6 +4,7 @@ import { VStack } from "@astryxdesign/core/VStack";
 import { Fragment, type ReactNode } from "react";
 import type { PageSection, Provenance } from "#/api";
 import { FallbackNotice } from "#/components/fallback-notice";
+import { Hero } from "#/components/hero";
 import { useDevWarnings } from "#/lib/dev-warnings";
 import type { Translate } from "#/lib/strings";
 
@@ -60,6 +61,10 @@ function render(
 	t: Translate,
 ): ReactNode {
 	switch (section.type) {
+		case "hero":
+			return (
+				<Hero section={section} index={index} provenance={provenance} t={t} />
+			);
 		case "prose":
 			return section.body ? (
 				<VStack gap={2}>

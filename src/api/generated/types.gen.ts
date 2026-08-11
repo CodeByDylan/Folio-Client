@@ -77,6 +77,20 @@ export type GetSiteResponse = {
     };
 };
 
+export type HeroActionView = {
+    id: string;
+    url: string;
+    label?: null | string;
+};
+
+export type HeroMediaView = {
+    role: string;
+    url: string;
+    width?: null | number | string;
+    height?: null | number | string;
+    alt?: null | string;
+};
+
 export type LanguageView = {
     language: string;
     bytes: number | string;
@@ -120,12 +134,27 @@ export type MetadataView = {
     releases: Array<ReleaseView>;
 };
 
-export type PageSectionView = {
-    id: string;
+export type PageSectionView = ({
     type: 'prose';
+} & PageSectionViewProseSectionView) | ({
+    type: 'hero';
+} & PageSectionViewHeroSectionView);
+
+export type PageSectionViewHeroSectionView = {
+    type?: 'hero';
+    headline?: null | string;
+    subheadline?: null | string;
+    actions: Array<HeroActionView>;
+    media: Array<HeroMediaView>;
+    id: string;
+};
+
+export type PageSectionViewProseSectionView = {
+    type?: 'prose';
     title?: null | string;
     body?: null | string;
     source: 'folio' | 'readme';
+    id: string;
 };
 
 export type PositionView = {

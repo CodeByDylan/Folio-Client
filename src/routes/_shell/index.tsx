@@ -1,6 +1,4 @@
 import { Divider } from "@astryxdesign/core/Divider";
-import { Heading } from "@astryxdesign/core/Heading";
-import { Text } from "@astryxdesign/core/Text";
 import { VStack } from "@astryxdesign/core/VStack";
 import { createFileRoute, getRouteApi, notFound } from "@tanstack/react-router";
 import { createProvenance } from "#/api";
@@ -37,15 +35,6 @@ function Home() {
 
 	return (
 		<VStack gap={8} maxWidth={980}>
-			<VStack gap={4}>
-				<Heading level={1} type="display-2">
-					{site.title}
-				</Heading>
-				<Text as="p" type="large" color="secondary">
-					{site.tagline}
-				</Text>
-			</VStack>
-
 			<PageSections
 				sections={page.sections}
 				provenance={createProvenance(page.provenance)}

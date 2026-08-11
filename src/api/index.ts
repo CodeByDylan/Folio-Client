@@ -14,4 +14,9 @@ export {
 	type Provenance,
 	pointer,
 } from "./provenance";
-export type { Page, PageSection, ProseSection } from "./sections";
+export type {
+	HeroSection,
+	Page,
+	PageSection,
+	ProseSection,
+} from "./sections";
