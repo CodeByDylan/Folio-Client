@@ -48,7 +48,7 @@ export function failureForStatus(status: number): FolioFailure {
 	return failuresByStatus[status] ?? "unexpected";
 }
 
-export function isFolioError(error: unknown): error is FolioError {
+function isFolioError(error: unknown): error is FolioError {
 	return error instanceof FolioError;
 }
 

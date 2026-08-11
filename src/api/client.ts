@@ -8,6 +8,7 @@ import {
 	zProblemDetails,
 } from "./generated/zod.gen";
 import type { Project, ProjectIndex, Report, Severity, Site } from "./model";
+import { type Page, zPage } from "./sections";
 
 export interface DiagnosticsQuery {
 	readonly severity?: Severity;
@@ -16,6 +17,7 @@ export interface DiagnosticsQuery {
 
 export interface FolioClient {
 	site(locale?: string): Promise<Site>;
+	page(slug: string, locale?: string): Promise<Page>;
 	projects(locale?: string): Promise<ProjectIndex>;
 	project(slug: string, locale?: string): Promise<Project>;
 	diagnostics(query?: DiagnosticsQuery): Promise<Report>;
@@ -115,6 +117,8 @@ export function createFolioClient({
 
 	return {
 		site: (locale) => read("/v1/site", zGetSiteResponse, { locale }),
+		page: (slug, locale) =>
+			read(`/v1/pages/${encodeURIComponent(slug)}`, zPage, { locale }),
 		projects: (locale) =>
 			read("/v1/projects", zListProjectsResponse, { locale }),
 		project: (slug, locale) =>
