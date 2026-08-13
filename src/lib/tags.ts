@@ -1,6 +1,6 @@
-import type { ProjectSummary } from "#/api";
+import type { ProjectSummary } from "#/api/model";
 
-type Tag = ProjectSummary["tags"][number];
+export type Tag = ProjectSummary["tags"][number];
 
 const colours = {
 	language: "blue",

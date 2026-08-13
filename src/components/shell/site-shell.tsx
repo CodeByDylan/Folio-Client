@@ -4,7 +4,6 @@ import { HStack } from "@astryxdesign/core/HStack";
 import { Icon } from "@astryxdesign/core/Icon";
 import {
 	SideNav,
-	SideNavHeading,
 	SideNavItem,
 	SideNavSection,
 } from "@astryxdesign/core/SideNav";
@@ -23,71 +22,51 @@ import {
 	StarIcon as StarSolid,
 } from "@heroicons/react/24/solid";
 import type { ReactNode } from "react";
-import type { ProjectSummary, Site } from "#/api";
+import type { Site } from "#/api/model";
 import { AppMark } from "#/components/app-mark";
 import { LocaleSelector } from "#/components/locale-selector";
 import { ModeSelector } from "#/components/mode-selector";
+import { SiteFooter } from "#/components/shell/site-footer";
 import { Viewport } from "#/components/viewport";
-import { app } from "#/lib/app";
-import { pagePath, projectPath } from "#/lib/routing";
+import type { Navigation } from "#/lib/navigation";
 import type { Translate } from "#/lib/strings";
 
 export interface SiteShellProps {
 	readonly site: Site;
-	readonly featured: ReadonlyArray<ProjectSummary>;
+	readonly navigation: Navigation;
 	readonly localeRejected: boolean;
-	readonly path: string;
 	readonly t: Translate;
 	readonly children: ReactNode;
 }
 
 export function SiteShell({
 	site,
-	featured,
-	path,
+	navigation,
 	localeRejected,
 	t,
 	children,
 }: SiteShellProps) {
-	const basePath = path;
-	const home = "/";
-	const projects = "/projects";
-
 	const controls = (
 		<HStack gap={2} align="center">
-			<LocaleSelector
-				label={t("language")}
-				strings={site.strings}
-				locales={site.locales}
-				active={site.locale}
-			/>
-			<ModeSelector
-				label={t("appearance")}
-				options={{
-					system: t("theme_system"),
-					light: t("theme_light"),
-					dark: t("theme_dark"),
-				}}
-			/>
+			<LocaleSelector t={t} locales={site.locales} active={site.locale} />
+			<ModeSelector t={t} />
 		</HStack>
 	);
 
 	const topNav = (
 		<TopNav
 			heading={<AppMark />}
-			startContent={site.pages
-				.filter((page) => page.nav)
-				.map((page) => (
-					<TopNavItem
-						key={page.slug}
-						href={pagePath(page)}
-						label={page.navLabel ?? page.slug}
-						icon={
-							<Icon icon={page.home ? HomeIcon : DocumentTextIcon} size="sm" />
-						}
-						isSelected={basePath === pagePath(page)}
-					/>
-				))}
+			startContent={navigation.pages.map((page) => (
+				<TopNavItem
+					key={page.slug}
+					href={page.href}
+					label={page.label}
+					icon={
+						<Icon icon={page.isHome ? HomeIcon : DocumentTextIcon} size="sm" />
+					}
+					isSelected={page.isCurrent}
+				/>
+			))}
 			endContent={<Viewport when="wide">{controls}</Viewport>}
 		/>
 	);
@@ -95,13 +74,6 @@ export function SiteShell({
 	const sideNav = (
 		<SideNav
 			collapsible
-			header={
-				<SideNavHeading
-					heading={site.title ?? app.name}
-					subheading={site.tagline ?? undefined}
-					headingHref={home}
-				/>
-			}
 			footer={
 				<Viewport when="narrow">
 					<VStack gap={2} padding={2}>
@@ -112,26 +84,26 @@ export function SiteShell({
 		>
 			<SideNavItem
 				label={t("all_projects")}
-				href={projects}
+				href={navigation.allProjects.href}
 				icon={RectangleStackIcon}
 				selectedIcon={StackSolid}
-				isSelected={basePath === "/projects"}
+				isSelected={navigation.allProjects.isCurrent}
 			/>
 
 			<SideNavSection title={t("featured")}>
-				{featured.length > 0 ? (
-					featured.map((project) => (
+				{navigation.featured.length > 0 ? (
+					navigation.featured.map((project) => (
 						<SideNavItem
 							key={project.slug}
-							label={project.name ?? project.slug}
-							href={projectPath(project.slug)}
+							label={project.label}
+							href={project.href}
 							icon={StarIcon}
 							selectedIcon={StarSolid}
-							isSelected={basePath === projectPath(project.slug)}
+							isSelected={project.isCurrent}
 							endContent={
-								Number(project.metadata.stars) > 0 ? (
+								project.stars > 0 ? (
 									<Text type="supporting" color="secondary">
-										{project.metadata.stars}
+										{project.stars}
 									</Text>
 								) : undefined
 							}
@@ -167,6 +139,7 @@ export function SiteShell({
 			sideNav={sideNav}
 		>
 			{children}
+			<SiteFooter site={site} navigation={navigation} t={t} />
 		</AppShell>
 	);
 }

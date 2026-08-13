@@ -60,12 +60,30 @@ export const zMediaView = z.object({
     alt: z.string().nullish()
 });
 
+export const zPageSectionViewContactSectionView = z.object({
+    type: z.enum(['contact']).optional(),
+    heading: z.string().nullish(),
+    blurb: z.string().nullish(),
+    id: z.string()
+});
+
 export const zPageSectionViewHeroSectionView = z.object({
     type: z.enum(['hero']).optional(),
     headline: z.string().nullish(),
     subheadline: z.string().nullish(),
     actions: z.array(zHeroActionView),
     media: z.array(zHeroMediaView),
+    id: z.string()
+});
+
+export const zPageSectionViewProjectsSectionView = z.object({
+    type: z.enum(['projects']).optional(),
+    heading: z.string().nullish(),
+    featured: z.boolean(),
+    limit: z.union([
+        z.int().min(-2147483648, { error: 'Invalid value: Expected int32 to be >= -2147483648' }).max(2147483647, { error: 'Invalid value: Expected int32 to be <= 2147483647' }),
+        z.string().regex(/^-?(?:0|[1-9]\d*)$/)
+    ]).nullish(),
     id: z.string()
 });
 
@@ -76,11 +94,6 @@ export const zPageSectionViewProseSectionView = z.object({
     source: z.enum(['folio', 'readme']),
     id: z.string()
 });
-
-export const zPageSectionView = z.discriminatedUnion('type', [
-    zPageSectionViewProseSectionView.extend({ type: z.literal('prose') }),
-    zPageSectionViewHeroSectionView.extend({ type: z.literal('hero') })
-]);
 
 export const zPositionView = z.object({
     line: z.union([
@@ -123,14 +136,16 @@ export const zProvenanceEntry = z.object({
     fallback: z.boolean()
 });
 
-export const zGetPageResponse = z.object({
-    requestedLocale: z.string(),
-    locale: z.string(),
-    slug: z.string(),
-    home: z.boolean(),
-    navLabel: z.string().nullish(),
-    sections: z.array(zPageSectionView),
-    provenance: z.record(z.string(), zProvenanceEntry)
+export const zQuestionView = z.object({
+    id: z.string(),
+    question: z.string().nullish(),
+    answer: z.string().nullish()
+});
+
+export const zPageSectionViewQaSectionView = z.object({
+    type: z.enum(['qa']).optional(),
+    questions: z.array(zQuestionView),
+    id: z.string()
 });
 
 export const zRefreshView = z.object({
@@ -232,6 +247,47 @@ export const zGetSiteResponse = z.object({
     links: z.array(zSiteLinkView),
     pages: z.array(zSitePageView),
     strings: z.record(z.string(), z.string()),
+    provenance: z.record(z.string(), zProvenanceEntry)
+});
+
+export const zSkillView = z.object({
+    id: z.string(),
+    level: z.enum([
+        'familiar',
+        'proficient',
+        'expert'
+    ]),
+    label: z.string().nullish()
+});
+
+export const zSkillCategoryView = z.object({
+    id: z.string(),
+    label: z.string().nullish(),
+    skills: z.array(zSkillView)
+});
+
+export const zPageSectionViewSkillsSectionView = z.object({
+    type: z.enum(['skills']).optional(),
+    categories: z.array(zSkillCategoryView),
+    id: z.string()
+});
+
+export const zPageSectionView = z.discriminatedUnion('type', [
+    zPageSectionViewProseSectionView.extend({ type: z.literal('prose') }),
+    zPageSectionViewHeroSectionView.extend({ type: z.literal('hero') }),
+    zPageSectionViewSkillsSectionView.extend({ type: z.literal('skills') }),
+    zPageSectionViewQaSectionView.extend({ type: z.literal('qa') }),
+    zPageSectionViewContactSectionView.extend({ type: z.literal('contact') }),
+    zPageSectionViewProjectsSectionView.extend({ type: z.literal('projects') })
+]);
+
+export const zGetPageResponse = z.object({
+    requestedLocale: z.string(),
+    locale: z.string(),
+    slug: z.string(),
+    home: z.boolean(),
+    navLabel: z.string().nullish(),
+    sections: z.array(zPageSectionView),
     provenance: z.record(z.string(), zProvenanceEntry)
 });
 

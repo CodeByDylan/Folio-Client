@@ -2,10 +2,8 @@ import { ClickableCard } from "@astryxdesign/core/ClickableCard";
 import { Heading } from "@astryxdesign/core/Heading";
 import { HStack } from "@astryxdesign/core/HStack";
 import { Icon } from "@astryxdesign/core/Icon";
-import { Skeleton } from "@astryxdesign/core/Skeleton";
 import { Text } from "@astryxdesign/core/Text";
 import { Timestamp } from "@astryxdesign/core/Timestamp";
-import { Token } from "@astryxdesign/core/Token";
 import { VStack } from "@astryxdesign/core/VStack";
 import {
 	ArrowPathIcon,
@@ -13,8 +11,10 @@ import {
 	StarIcon,
 } from "@heroicons/react/24/outline";
 import type { ComponentType, ReactNode, SVGProps } from "react";
-import type { ProjectSummary } from "#/api";
-import { tagColour } from "#/lib/tags";
+import type { ProjectSummary } from "#/api/model";
+import { TagRow } from "#/components/tag-row";
+import { hasStars, projectDescription, projectName } from "#/lib/project";
+import { projectPath } from "#/lib/routing";
 
 function Stat({
 	icon,
@@ -35,17 +35,16 @@ function Stat({
 
 export interface ProjectCardProps {
 	readonly project: ProjectSummary;
-	readonly href: string;
 }
 
-export function ProjectCard({ project, href }: ProjectCardProps) {
+export function ProjectCard({ project }: ProjectCardProps) {
 	const { metadata } = project;
-	const name = project.name ?? project.slug;
+	const name = projectName(project);
 
 	return (
 		<ClickableCard
 			label={name}
-			href={href}
+			href={projectPath(project.slug)}
 			padding={5}
 			elevation="low"
 			height="100%"
@@ -54,25 +53,16 @@ export function ProjectCard({ project, href }: ProjectCardProps) {
 				<VStack gap={1.5}>
 					<Heading level={3}>{name}</Heading>
 					<Text as="p" color="secondary" maxLines={3}>
-						{project.tagline ?? metadata.description ?? project.repo}
+						{projectDescription(project)}
 					</Text>
 				</VStack>
 
-				{project.tags.length > 0 ? (
-					<HStack gap={1.5} wrap="wrap">
-						{project.tags.slice(0, 4).map((tag) => (
-							<Token
-								key={tag.id}
-								size="sm"
-								color={tagColour(tag)}
-								label={tag.label ?? tag.id}
-							/>
-						))}
-					</HStack>
-				) : null}
+				<TagRow tags={project.tags} limit={4} />
 
 				<HStack gap={4} align="center" wrap="wrap">
-					<Stat icon={StarIcon}>{metadata.stars}</Stat>
+					{hasStars(metadata) ? (
+						<Stat icon={StarIcon}>{metadata.stars}</Stat>
+					) : null}
 					{metadata.primaryLanguage ? (
 						<Text type="supporting" color="secondary">
 							{metadata.primaryLanguage}
@@ -91,24 +81,5 @@ export function ProjectCard({ project, href }: ProjectCardProps) {
 				</HStack>
 			</VStack>
 		</ClickableCard>
-	);
-}
-
-export function ProjectCardSkeleton({
-	index = 0,
-}: {
-	readonly index?: number;
-}) {
-	return (
-		<VStack gap={3} padding={5}>
-			<Skeleton height={22} width="55%" index={index} />
-			<Skeleton height={16} width="100%" index={index} />
-			<Skeleton height={16} width="80%" index={index} />
-			<HStack gap={1.5}>
-				<Skeleton height={20} width={64} radius="rounded" index={index} />
-				<Skeleton height={20} width={52} radius="rounded" index={index} />
-			</HStack>
-			<Skeleton height={14} width="45%" index={index} />
-		</VStack>
 	);
 }

@@ -1,8 +1,8 @@
-export const defaultStrings: Readonly<Record<string, string>> = {
+/** Every string the client can ask for. A key with no entry here does not compile. */
+export const defaultStrings = {
 	home: "Home",
 	all_projects: "All projects",
 	featured: "Featured",
-	featured_work: "Featured work",
 	projects: "Projects",
 	appearance: "Appearance",
 	theme_system: "System",
@@ -18,7 +18,6 @@ export const defaultStrings: Readonly<Record<string, string>> = {
 	started: "Started",
 	last_push: "Last push",
 	latest_release: "Latest release",
-	updated: "Updated",
 	translation_missing: "Shown in English",
 	locale_unavailable:
 		"Your language preference is no longer available. Showing the default language.",
@@ -29,10 +28,30 @@ export const defaultStrings: Readonly<Record<string, string>> = {
 		"This project has not been described in its repository yet.",
 	no_content_title: "Nothing here yet",
 	no_content_body: "This page has no sections to show.",
+	footer_pages: "Pages",
+	footer_elsewhere: "Elsewhere",
+	skills_title: "Skills",
+	questions_title: "Questions",
+	contact_heading: "Get in touch",
+	contact_name: "Name",
+	contact_email: "Email",
+	contact_message: "Message",
+	contact_submit: "Send message",
+	contact_success: "Thanks — your message is on its way.",
+	contact_error: "That did not send. Try again in a moment.",
+	skill_familiar: "Familiar",
+	skill_proficient: "Proficient",
+	skill_expert: "Expert",
+	status_wip: "In progress",
+	status_active: "Active",
+	status_maintenance: "Maintenance",
+	status_archived: "Archived",
 	not_found_title: "Page not found",
 	not_found_body: "This page does not exist, or the project was removed.",
 	error_title: "Something went wrong",
 	error_body: "The portfolio could not be loaded. Try again in a moment.",
 	retry: "Try again",
 	go_home: "Back to home",
-};
+} as const satisfies Record<string, string>;
+
+export type StringKey = keyof typeof defaultStrings;

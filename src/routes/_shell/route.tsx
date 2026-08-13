@@ -6,12 +6,14 @@ import {
 	useRouter,
 } from "@tanstack/react-router";
 import { getProjects, getSite } from "#/api/server";
-import { BarePage } from "#/components/bare-page";
+import { bareBoundaries } from "#/components/page-boundaries";
 import { SiteShell } from "#/components/shell/site-shell";
-import { Failure, NotFound, PageSkeleton } from "#/components/states";
+import { PageSkeleton } from "#/components/states";
 import { useDevWarnings } from "#/lib/dev-warnings";
+import { navigation } from "#/lib/navigation";
 import { shadowedPages } from "#/lib/routing";
-import { astryxOverrides, fallbackTranslator, translator } from "#/lib/strings";
+import { useShell } from "#/lib/shell";
+import { astryxOverrides } from "#/lib/strings";
 
 export const Route = createFileRoute("/_shell")({
 	loader: async () => {
@@ -23,27 +25,13 @@ export const Route = createFileRoute("/_shell")({
 			localeRejected: site.localeRejected,
 		};
 	},
+	...bareBoundaries,
 	pendingComponent: PageSkeleton,
-	errorComponent: ({ reset }) => (
-		<BarePage>
-			<Failure t={fallbackTranslator} onRetry={reset} />
-		</BarePage>
-	),
-	notFoundComponent: () => (
-		<BarePage>
-			<NotFound
-				t={fallbackTranslator}
-				onHome={() => {
-					window.location.href = "/";
-				}}
-			/>
-		</BarePage>
-	),
 	component: ShellLayout,
 });
 
 function ShellLayout() {
-	const { site, projects, localeRejected } = Route.useLoaderData();
+	const { site, projects, localeRejected, t } = useShell();
 	const { pathname } = useLocation();
 	const router = useRouter();
 
@@ -61,10 +49,9 @@ function ShellLayout() {
 		>
 			<SiteShell
 				site={site}
-				featured={projects.filter((project) => project.featured)}
-				path={pathname}
+				navigation={navigation(site, projects, pathname)}
 				localeRejected={localeRejected}
-				t={translator(site.strings)}
+				t={t}
 			>
 				<Outlet />
 			</SiteShell>

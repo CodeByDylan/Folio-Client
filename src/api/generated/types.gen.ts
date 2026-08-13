@@ -138,7 +138,22 @@ export type PageSectionView = ({
     type: 'prose';
 } & PageSectionViewProseSectionView) | ({
     type: 'hero';
-} & PageSectionViewHeroSectionView);
+} & PageSectionViewHeroSectionView) | ({
+    type: 'skills';
+} & PageSectionViewSkillsSectionView) | ({
+    type: 'qa';
+} & PageSectionViewQaSectionView) | ({
+    type: 'contact';
+} & PageSectionViewContactSectionView) | ({
+    type: 'projects';
+} & PageSectionViewProjectsSectionView);
+
+export type PageSectionViewContactSectionView = {
+    type?: 'contact';
+    heading?: null | string;
+    blurb?: null | string;
+    id: string;
+};
 
 export type PageSectionViewHeroSectionView = {
     type?: 'hero';
@@ -149,11 +164,31 @@ export type PageSectionViewHeroSectionView = {
     id: string;
 };
 
+export type PageSectionViewProjectsSectionView = {
+    type?: 'projects';
+    heading?: null | string;
+    featured: boolean;
+    limit?: null | number | string;
+    id: string;
+};
+
 export type PageSectionViewProseSectionView = {
     type?: 'prose';
     title?: null | string;
     body?: null | string;
     source: 'folio' | 'readme';
+    id: string;
+};
+
+export type PageSectionViewQaSectionView = {
+    type?: 'qa';
+    questions: Array<QuestionView>;
+    id: string;
+};
+
+export type PageSectionViewSkillsSectionView = {
+    type?: 'skills';
+    categories: Array<SkillCategoryView>;
     id: string;
 };
 
@@ -188,6 +223,12 @@ export type ProjectSummary = {
 export type ProvenanceEntry = {
     locale: string;
     fallback: boolean;
+};
+
+export type QuestionView = {
+    id: string;
+    question?: null | string;
+    answer?: null | string;
 };
 
 export type RefreshView = {
@@ -228,6 +269,18 @@ export type SitePageView = {
     home: boolean;
     nav: boolean;
     navLabel?: null | string;
+};
+
+export type SkillCategoryView = {
+    id: string;
+    label?: null | string;
+    skills: Array<SkillView>;
+};
+
+export type SkillView = {
+    id: string;
+    level: 'familiar' | 'proficient' | 'expert';
+    label?: null | string;
 };
 
 export type TagView = {

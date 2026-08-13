@@ -1,7 +1,8 @@
 import { Grid } from "@astryxdesign/core/Grid";
-import type { ProjectSummary } from "#/api";
+import type { ProjectSummary } from "#/api/model";
 import { ProjectCard } from "#/components/project-card";
-import { projectPath } from "#/lib/routing";
+
+const projectColumns = { minWidth: 300, max: 2 } as const;
 
 export interface ProjectGridProps {
 	readonly projects: ReadonlyArray<ProjectSummary>;
@@ -9,13 +10,9 @@ export interface ProjectGridProps {
 
 export function ProjectGrid({ projects }: ProjectGridProps) {
 	return (
-		<Grid columns={{ minWidth: 300, max: 2 }} gap={4}>
+		<Grid columns={projectColumns} gap={4}>
 			{projects.map((project) => (
-				<ProjectCard
-					key={project.slug}
-					project={project}
-					href={projectPath(project.slug)}
-				/>
+				<ProjectCard key={project.slug} project={project} />
 			))}
 		</Grid>
 	);

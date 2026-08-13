@@ -1,5 +1,5 @@
 import { Token } from "@astryxdesign/core/Token";
-import type { PointerSegment, Provenance } from "#/api";
+import type { PointerSegment, Provenance } from "#/api/provenance";
 import type { Translate } from "#/lib/strings";
 
 export interface FallbackNoticeProps {
