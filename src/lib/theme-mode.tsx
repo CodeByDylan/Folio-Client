@@ -8,9 +8,8 @@ import {
 	useMemo,
 	useState,
 } from "react";
-import { setThemeMode, type ThemeMode } from "#/api/server";
-
-export type { ThemeMode };
+import { setThemeMode } from "#/api/server";
+import type { ThemeMode } from "#/lib/theme";
 
 interface ThemeModeContextValue {
 	readonly mode: ThemeMode;
@@ -36,10 +35,18 @@ export function ThemeModeProvider({
 	children,
 }: ThemeModeProviderProps) {
 	const [mode, setModeState] = useState<ThemeMode>(initial);
+	const [seen, setSeen] = useState<ThemeMode>(initial);
+
+	// The loader re-reads the cookie on invalidation; a changed cookie wins over local state.
+	if (seen !== initial) {
+		setSeen(initial);
+		setModeState(initial);
+	}
 
 	const setMode = useCallback((next: ThemeMode) => {
 		setModeState(next);
-		void setThemeMode({ data: { mode: next } });
+		// Persistence is best-effort; the optimistic mode stands either way.
+		void setThemeMode({ data: { mode: next } }).catch(() => {});
 	}, []);
 
 	const value = useMemo(() => ({ mode, setMode }), [mode, setMode]);

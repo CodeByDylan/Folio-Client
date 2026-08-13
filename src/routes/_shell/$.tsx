@@ -1,19 +1,8 @@
-import { Heading } from "@astryxdesign/core/Heading";
-import { VStack } from "@astryxdesign/core/VStack";
-import {
-	createFileRoute,
-	getRouteApi,
-	notFound,
-	redirect,
-} from "@tanstack/react-router";
-import { createProvenance, hasFailure, type Page } from "#/api";
+import { createFileRoute, notFound, redirect } from "@tanstack/react-router";
 import { getPage } from "#/api/server";
-import { PageError, PageMissing } from "#/components/page-boundaries";
-import { PageSections } from "#/components/page-sections";
-import { NoContent, PageSkeleton } from "#/components/states";
-import { translator } from "#/lib/strings";
-
-const layout = getRouteApi("/_shell");
+import { PageBody } from "#/components/page-body";
+import { shellBoundaries } from "#/components/page-boundaries";
+import { requested } from "#/lib/loaders";
 
 export const Route = createFileRoute("/_shell/$")({
 	loader: async ({ params }) => {
@@ -24,17 +13,7 @@ export const Route = createFileRoute("/_shell/$")({
 			throw notFound();
 		}
 
-		let page: Page;
-
-		try {
-			page = (await getPage({ data: { slug } })).value;
-		} catch (error) {
-			if (hasFailure(error, "not-found") || hasFailure(error, "invalid")) {
-				throw notFound();
-			}
-
-			throw error;
-		}
+		const page = await requested(getPage({ data: { slug } }));
 
 		// The home page is canonically `/`, so its slug must not serve a second copy.
 		if (page.home) {
@@ -43,31 +22,10 @@ export const Route = createFileRoute("/_shell/$")({
 
 		return page;
 	},
-	pendingComponent: PageSkeleton,
-	errorComponent: ({ reset }) => <PageError reset={reset} />,
-	notFoundComponent: () => <PageMissing />,
+	...shellBoundaries,
 	component: ContentPage,
 });
 
 function ContentPage() {
-	const { site } = layout.useLoaderData();
-	const page = Route.useLoaderData();
-	const t = translator(site.strings);
-
-	return (
-		<VStack gap={8} maxWidth={980}>
-			{page.navLabel ? (
-				<Heading level={1} type="display-2">
-					{page.navLabel}
-				</Heading>
-			) : null}
-
-			<PageSections
-				sections={page.sections}
-				provenance={createProvenance(page.provenance)}
-				t={t}
-				empty={<NoContent t={t} />}
-			/>
-		</VStack>
-	);
+	return <PageBody page={Route.useLoaderData()} />;
 }

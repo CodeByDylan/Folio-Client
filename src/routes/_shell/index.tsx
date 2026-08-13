@@ -1,15 +1,8 @@
-import { Divider } from "@astryxdesign/core/Divider";
-import { VStack } from "@astryxdesign/core/VStack";
-import { createFileRoute, getRouteApi, notFound } from "@tanstack/react-router";
-import { createProvenance } from "#/api";
+import { createFileRoute, notFound } from "@tanstack/react-router";
 import { getPage } from "#/api/server";
-import { PageError } from "#/components/page-boundaries";
-import { PageSections } from "#/components/page-sections";
-import { ProjectGrid } from "#/components/project-grid";
-import { NoProjects } from "#/components/states";
-import { translator } from "#/lib/strings";
-
-const layout = getRouteApi("/_shell");
+import { PageBody } from "#/components/page-body";
+import { shellBoundaries } from "#/components/page-boundaries";
+import { requested } from "#/lib/loaders";
 
 export const Route = createFileRoute("/_shell/")({
 	loader: async ({ parentMatchPromise }) => {
@@ -20,35 +13,12 @@ export const Route = createFileRoute("/_shell/")({
 			throw notFound();
 		}
 
-		return (await getPage({ data: { slug: home.slug } })).value;
+		return requested(getPage({ data: { slug: home.slug } }));
 	},
-	errorComponent: ({ reset }) => <PageError reset={reset} />,
+	...shellBoundaries,
 	component: Home,
 });
 
 function Home() {
-	const { site, projects } = layout.useLoaderData();
-	const page = Route.useLoaderData();
-	const t = translator(site.strings);
-
-	const featured = projects.filter((project) => project.featured);
-
-	return (
-		<VStack gap={8} maxWidth={980}>
-			<PageSections
-				sections={page.sections}
-				provenance={createProvenance(page.provenance)}
-				t={t}
-			/>
-
-			<VStack gap={5}>
-				<Divider label={t("featured_work")} />
-				{featured.length > 0 ? (
-					<ProjectGrid projects={featured} />
-				) : (
-					<NoProjects t={t} />
-				)}
-			</VStack>
-		</VStack>
-	);
+	return <PageBody page={Route.useLoaderData()} />;
 }

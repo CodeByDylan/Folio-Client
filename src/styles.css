@@ -8,3 +8,24 @@
 @import "@dylandebeer/theme-pastel/theme.css";
 @import "@astryxdesign/core/tailwind-theme.css";
 @import "tailwindcss/utilities.css" layer(utilities);
+
+@layer components {
+	/* Astryx hides collapsed content with display:none, which no transition can cross.
+	   An animation instead replays each time the row is shown. */
+	@keyframes reveal {
+		from {
+			opacity: 0;
+			transform: translateY(calc(var(--spacing-2) * -1));
+		}
+	}
+
+	.astryx-collapsible-content {
+		animation: reveal var(--duration-fast) var(--ease-standard);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.astryx-collapsible-content {
+			animation: none;
+		}
+	}
+}

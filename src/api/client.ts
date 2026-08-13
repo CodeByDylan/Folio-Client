@@ -1,26 +1,19 @@
 import type { z } from "zod";
 import { FolioError, failureForStatus } from "./errors";
+import { zProblemDetails } from "./generated/zod.gen";
 import {
-	zGetDiagnosticsResponse,
-	zGetProjectResponse,
-	zGetSiteResponse,
-	zListProjectsResponse,
-	zProblemDetails,
-} from "./generated/zod.gen";
-import type { Project, ProjectIndex, Report, Severity, Site } from "./model";
-import { type Page, zPage } from "./sections";
-
-export interface DiagnosticsQuery {
-	readonly severity?: Severity;
-	readonly project?: string;
-}
+	type ResourceArgs,
+	type ResourceName,
+	type ResourceOf,
+	resources,
+} from "./resources";
 
 export interface FolioClient {
-	site(locale?: string): Promise<Site>;
-	page(slug: string, locale?: string): Promise<Page>;
-	projects(locale?: string): Promise<ProjectIndex>;
-	project(slug: string, locale?: string): Promise<Project>;
-	diagnostics(query?: DiagnosticsQuery): Promise<Report>;
+	read<TName extends ResourceName>(
+		name: TName,
+		locale: string | undefined,
+		...args: ResourceArgs<TName>
+	): Promise<ResourceOf<TName>>;
 }
 
 export interface FolioClientOptions {
@@ -90,45 +83,49 @@ export function createFolioClient({
 	baseUrl,
 	fetch = globalThis.fetch,
 }: FolioClientOptions): FolioClient {
-	async function read<TSchema extends z.ZodType>(
-		resource: string,
-		schema: TSchema,
-		parameters: QueryParameters = {},
-	): Promise<z.infer<TSchema>> {
-		let response: Response;
-
-		try {
-			response = await fetch(address(baseUrl, resource, parameters), {
-				headers: { accept: "application/json" },
-			});
-		} catch (cause) {
-			throw new FolioError("transport", `${resource} is unreachable.`, {
-				resource,
-				cause,
-			});
-		}
-
-		if (!response.ok) {
-			throw await rejection(response, resource);
-		}
-
-		return conform(schema, await response.json(), resource);
-	}
-
 	return {
-		site: (locale) => read("/v1/site", zGetSiteResponse, { locale }),
-		page: (slug, locale) =>
-			read(`/v1/pages/${encodeURIComponent(slug)}`, zPage, { locale }),
-		projects: (locale) =>
-			read("/v1/projects", zListProjectsResponse, { locale }),
-		project: (slug, locale) =>
-			read(`/v1/projects/${encodeURIComponent(slug)}`, zGetProjectResponse, {
-				locale,
-			}),
-		diagnostics: (query = {}) =>
-			read("/v1/diagnostics", zGetDiagnosticsResponse, {
-				severity: query.severity,
-				project: query.project,
-			}),
+		async read<TName extends ResourceName>(
+			name: TName,
+			locale: string | undefined,
+			...args: ResourceArgs<TName>
+		): Promise<ResourceOf<TName>> {
+			const entry = resources[name];
+			// The table pairs each path with its own arity; the union loses that pairing.
+			const resource = (entry.path as (...rest: typeof args) => string)(
+				...args,
+			);
+
+			let response: Response;
+
+			try {
+				response = await fetch(address(baseUrl, resource, { locale }), {
+					headers: { accept: "application/json" },
+				});
+			} catch (cause) {
+				throw new FolioError("transport", `${resource} is unreachable.`, {
+					resource,
+					cause,
+				});
+			}
+
+			if (!response.ok) {
+				throw await rejection(response, resource);
+			}
+
+			let body: unknown;
+
+			try {
+				body = await response.json();
+			} catch (cause) {
+				throw new FolioError(
+					"contract",
+					`${resource} did not answer with JSON.`,
+					{ resource, status: response.status, cause },
+				);
+			}
+
+			// Same pairing the union loses: this entry's schema yields this name's type.
+			return conform(entry.schema, body, resource) as ResourceOf<TName>;
+		},
 	};
 }

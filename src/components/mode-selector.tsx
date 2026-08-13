@@ -8,41 +8,45 @@ import {
 	MoonIcon,
 	SunIcon,
 } from "@heroicons/react/24/outline";
-import { type ThemeMode, useThemeMode } from "#/lib/theme-mode";
+import type { Translate } from "#/lib/strings";
+import { type ThemeMode, themeModes } from "#/lib/theme";
+import { useThemeMode } from "#/lib/theme-mode";
+
+const icons: Readonly<Record<ThemeMode, typeof SunIcon>> = {
+	system: ComputerDesktopIcon,
+	light: SunIcon,
+	dark: MoonIcon,
+};
+
+const labels = {
+	system: "theme_system",
+	light: "theme_light",
+	dark: "theme_dark",
+} as const;
 
 export interface ModeSelectorProps {
-	readonly label: string;
-	readonly options: Readonly<Record<ThemeMode, string>>;
+	readonly t: Translate;
 }
 
-export function ModeSelector({ label, options }: ModeSelectorProps) {
+export function ModeSelector({ t }: ModeSelectorProps) {
 	const { mode, setMode } = useThemeMode();
 
 	return (
 		<SegmentedControl
-			label={label}
+			label={t("appearance")}
 			size="sm"
 			value={mode}
 			onChange={(value) => setMode(value as ThemeMode)}
 		>
-			<SegmentedControlItem
-				value="system"
-				label={options.system}
-				isLabelHidden
-				icon={<Icon icon={ComputerDesktopIcon} size="xsm" />}
-			/>
-			<SegmentedControlItem
-				value="light"
-				label={options.light}
-				isLabelHidden
-				icon={<Icon icon={SunIcon} size="xsm" />}
-			/>
-			<SegmentedControlItem
-				value="dark"
-				label={options.dark}
-				isLabelHidden
-				icon={<Icon icon={MoonIcon} size="xsm" />}
-			/>
+			{themeModes.map((each) => (
+				<SegmentedControlItem
+					key={each}
+					value={each}
+					label={t(labels[each])}
+					isLabelHidden
+					icon={<Icon icon={icons[each]} size="xsm" />}
+				/>
+			))}
 		</SegmentedControl>
 	);
 }

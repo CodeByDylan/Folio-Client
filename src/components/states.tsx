@@ -1,6 +1,5 @@
 import { Button } from "@astryxdesign/core/Button";
 import { EmptyState } from "@astryxdesign/core/EmptyState";
-import { Grid } from "@astryxdesign/core/Grid";
 import { Icon } from "@astryxdesign/core/Icon";
 import { Skeleton } from "@astryxdesign/core/Skeleton";
 import { VStack } from "@astryxdesign/core/VStack";
@@ -9,9 +8,14 @@ import {
 	FolderOpenIcon,
 	MagnifyingGlassIcon,
 } from "@heroicons/react/24/outline";
-import { ProjectCardSkeleton } from "#/components/project-card";
 import type { Translate } from "#/lib/strings";
 
+/** Three states mean "we looked and found nothing", and they look alike. */
+const nothingFound = (
+	<Icon icon={MagnifyingGlassIcon} size="lg" color="secondary" />
+);
+
+// Shaped like prose, not project cards: any kind of page may be behind it.
 export function PageSkeleton() {
 	return (
 		<VStack gap={6}>
@@ -19,11 +23,11 @@ export function PageSkeleton() {
 				<Skeleton height={40} width="45%" />
 				<Skeleton height={20} width="70%" />
 			</VStack>
-			<Grid columns={{ minWidth: 300, max: 2 }} gap={4}>
-				{[0, 1, 2, 3].map((index) => (
-					<ProjectCardSkeleton key={index} index={index} />
-				))}
-			</Grid>
+			<VStack gap={3}>
+				<Skeleton height={16} width="100%" index={1} />
+				<Skeleton height={16} width="95%" index={2} />
+				<Skeleton height={16} width="60%" index={3} />
+			</VStack>
 		</VStack>
 	);
 }
@@ -57,7 +61,7 @@ export function NoSections({ t }: { readonly t: Translate }) {
 			isCompact
 			title={t("no_sections_title")}
 			description={t("no_sections_body")}
-			icon={<Icon icon={MagnifyingGlassIcon} size="lg" color="secondary" />}
+			icon={nothingFound}
 		/>
 	);
 }
@@ -68,7 +72,7 @@ export function NoContent({ t }: { readonly t: Translate }) {
 			isCompact
 			title={t("no_content_title")}
 			description={t("no_content_body")}
-			icon={<Icon icon={MagnifyingGlassIcon} size="lg" color="secondary" />}
+			icon={nothingFound}
 		/>
 	);
 }
@@ -78,7 +82,7 @@ export function Failure({
 	onRetry,
 }: {
 	readonly t: Translate;
-	readonly onRetry?: () => void;
+	readonly onRetry: () => void;
 }) {
 	return (
 		<EmptyState
@@ -87,30 +91,20 @@ export function Failure({
 			description={t("error_body")}
 			icon={<Icon icon={ExclamationTriangleIcon} size="lg" color="error" />}
 			actions={
-				onRetry ? (
-					<Button label={t("retry")} variant="primary" onClick={onRetry} />
-				) : undefined
+				<Button label={t("retry")} variant="primary" onClick={onRetry} />
 			}
 		/>
 	);
 }
 
-export function NotFound({
-	t,
-	onHome,
-}: {
-	readonly t: Translate;
-	readonly onHome: () => void;
-}) {
+export function NotFound({ t }: { readonly t: Translate }) {
 	return (
 		<EmptyState
 			headingLevel={2}
 			title={t("not_found_title")}
 			description={t("not_found_body")}
-			icon={<Icon icon={MagnifyingGlassIcon} size="lg" color="secondary" />}
-			actions={
-				<Button label={t("go_home")} variant="primary" onClick={onHome} />
-			}
+			icon={nothingFound}
+			actions={<Button label={t("go_home")} variant="primary" href="/" />}
 		/>
 	);
 }
